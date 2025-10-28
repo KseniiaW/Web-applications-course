@@ -1,0 +1,11 @@
+//упражнение_4
+
+function NewClass(title, url) {
+    this.title = title;
+    this.url = url;
+    this.show = function() {
+        document.write(title + " " + url + "<br>")
+    }
+}
+var element = new NewClass("Яндекс", "https://ya.ru");
+element.show();
