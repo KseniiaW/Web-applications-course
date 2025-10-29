@@ -1,0 +1,15 @@
+<body>
+<img src="apple.jpg" width="200" onclick="zoom()" id="img">
+<script>
+var big = false;
+
+function zoom() {
+    if (big) {
+        document.getElementById("img").width = 200;
+    } else {
+        document.getElementById("img").width = 400;
+    }
+    big = !big;
+}
+</script>
+</body>

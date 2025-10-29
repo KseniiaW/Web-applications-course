@@ -1,0 +1,25 @@
+<meta charset="UTF-8">
+<p id="change1">Текст1</p>
+<p id="change2">Текст2</p>
+
+<a href="#" onclick="ChangeStyle()">Кликни чтобы изменить Текст1</br></a>
+
+<a href="#" onmouseover="ChangeStyle2()">Наведи чтобы изменить Текст2</a>
+
+<script>
+function ChangeStyle() {
+    var text = document.getElementById("change1");
+    text.style.color = "red";
+    text.style.fontSize = "24px";
+    text.style.textDecoration = "underline";
+    text.style.fontWeight = "bold";
+}
+  
+  function ChangeStyle2() {
+    var text = document.getElementById("change2");
+    text.style.color = "red";
+    text.style.fontSize = "24px";
+    text.style.textDecoration = "underline";
+    text.style.fontWeight = "bold";
+}
+</script>
