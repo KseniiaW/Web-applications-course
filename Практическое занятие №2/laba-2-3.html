@@ -1,0 +1,21 @@
+<head>
+    <meta charset="UTF-8">
+    <title>Новое окно</title>
+</head>
+<body>
+
+<a href="#" onclick="openNewWindow()">Новое окно</a>
+
+<script>
+function openNewWindow() {
+    var features = "width=300,height=400," +
+                  "menubar=yes," +
+                  "toolbar=yes," +
+                  "location=yes," +
+                  "status=yes," +
+                  "resizable=yes";
+    
+    window.open("", "newWindow", features);
+}
+</script>
+</body>
