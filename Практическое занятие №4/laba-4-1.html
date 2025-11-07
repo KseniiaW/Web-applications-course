@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Градиент на Canvas</title>
+  <style>
+    body {
+      background-color: #f0f0f0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    canvas {
+      border: 1px solid #ccc;
+      box-shadow: 4px 6px 12px rgba(0, 0, 0, 0.3);
+    }
+  </style>
+</head>
+<body>
+  <canvas id="gradientCanvas" width="600" height="400"></canvas>
+
+  <script>
+    const canvas = document.getElementById("gradientCanvas");
+    const ctx = canvas.getContext("2d");
+
+    const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+
+    gradient.addColorStop(0, "#d21b68"); 
+    gradient.addColorStop(0.5, "#4ab783"); 
+    gradient.addColorStop(1, "#f4ed5c"); 
+
+
+    ctx.fillStyle = gradient;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+  </script>
+</body>
+</html>
