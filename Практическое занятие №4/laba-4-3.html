@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Мультимедийный контент в HTML5</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        h1 {
+            text-align: center;
+        }
+        
+        .section {
+            margin: 30px 0;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        
+        audio, video {
+            width: 100%;
+            margin: 10px 0;
+        }
+        
+        .svg-box {
+            text-align: center;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Мультимедийный контент в HTML5</h1>
+    
+    <div class="section">
+        <h2>Аудио</h2>
+        <p>Тег <code>&lt;audio&gt;</code> для аудиофайлов:</p>
+        <audio controls>
+            <source src="Юность.mp3" type="audio/mpeg">
+            Ваш браузер не поддерживает аудио.
+        </audio>
+    </div>
+
+    <div class="section">
+        <h2>Видео</h2>
+        <p>Тег <code>&lt;video&gt;</code> для видеофайлов:</p>
+        <video controls>
+            <source src="ForTheBirds.mp4" type="video/mp4">
+            Ваш браузер не поддерживает видео.
+        </video>
+    </div>
+
+    <div class="section">
+        <h2>SVG графика</h2>
+        <p>Тег <code>&lt;embed&gt;</code> для SVG:</p>
+        <div class="svg-box">
+            <embed 
+                src="example.svg"
+                width="300" 
+                height="200" 
+                type="image/svg+xml">
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const audio = document.querySelector('audio');
+            const video = document.querySelector('video');
+            
+            audio.addEventListener('play', function() {
+                console.log('Аудио играет');
+            });
+            
+            video.addEventListener('play', function() {
+                console.log('Видео играет');
+            });
+        });
+    </script>
+</body>
+</html>
