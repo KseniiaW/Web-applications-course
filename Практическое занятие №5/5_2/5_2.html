@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Телефонная записная книжка</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h2>Телефонная записная книжка</h2>
+    
+    <form id="contactForm">
+        <div class="form-group">
+            <label for="phone">Телефон:</label>
+            <input type="tel" id="phone" placeholder="+7 (XXX) XXX-XX-XX" required>
+            <div id="phoneError" class="error-message"></div>
+        </div>
+        
+        <div class="form-group">
+            <label for="name">Имя:</label>
+            <input type="text" id="name" placeholder="Введите имя" required>
+            <div id="nameError" class="error-message"></div>
+        </div>
+        
+        <button type="submit">Сохранить контакт</button>
+        <button type="button" id="clearAllBtn">Очистить все</button>
+    </form>
+    
+    <div id="message"></div>
+    
+    <h3>Сохраненные контакты:</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Телефон</th>
+                <th>Имя</th>
+                <th>Действие</th>
+            </tr>
+        </thead>
+        <tbody id="contactsTable">
+            <!-- Контакты будут загружаться здесь -->
+        </tbody>
+    </table>
+
+    <script>
+        "use strict"; 
+
+        const CONTACTS_KEY = 'phoneBookContacts_v2'; // Единый ключ для всех контактов
+        const contactForm = document.getElementById('contactForm');
+        const phoneInput = document.getElementById('phone');
+        const nameInput = document.getElementById('name');
+        const clearAllBtn = document.getElementById('clearAllBtn');
+        const messageDiv = document.getElementById('message');
+        const contactsTable = document.getElementById('contactsTable');
+        const phoneError = document.getElementById('phoneError');
+        const nameError = document.getElementById('nameError');
+
+        // Проверка поддержки localStorage
+        function isLocalStorageSupported() {
+            try {
+                return 'localStorage' in window && window['localStorage'] !== null;
+            } catch(e) {
+                return false;
+            }
+        }
+
+        function validateInput(phone, name) {
+            let isValid = true;
+            phoneError.textContent = '';
+            nameError.textContent = '';
+
+            if (!phone.trim()) {
+                phoneError.textContent = 'Телефон обязателен.';
+                isValid = false;
+            } else if (!/^\+?\d{10,15}$/.test(phone.replace(/[^\d]/g, ''))) {
+                phoneError.textContent = 'Введите корректный номер (10-15 цифр).';
+                isValid = false;
+            }
+
+            if (!name.trim()) {
+                nameError.textContent = 'Имя обязательно.';
+                isValid = false;
+            }
+            
+            return isValid;
+        }
+
+        // Операции с localStorage
+
+        function getContactsFromStorage() {
+            const stored = localStorage.getItem(CONTACTS_KEY);
+            return stored ? JSON.parse(stored) : [];
+        }
+
+        function saveContactsToStorage(contacts) {
+            localStorage.setItem(CONTACTS_KEY, JSON.stringify(contacts));
+        }
+
+        function showMessage(text, type) {
+            messageDiv.innerHTML = `<div class="message ${type}">${text}</div>`;
+            setTimeout(() => {
+                messageDiv.innerHTML = '';
+            }, 3000);
+        }
+
+        function saveContact(event) {
+            if (event) event.preventDefault();
+
+            if (!isLocalStorageSupported()) {
+                showMessage('Ваш браузер не поддерживает localStorage!', 'error');
+                return;
+            }
+
+            const phone = phoneInput.value.trim();
+            const name = nameInput.value.trim();
+
+            if (!validateInput(phone, name)) {
+                return;
+            }
+
+            const contacts = getContactsFromStorage();
+         
+            const existingContactIndex = contacts.findIndex(contact => contact.phone === phone);
+            if (existingContactIndex > -1) {
+                if (confirm('Контакт с таким телефоном уже существует. Обновить имя?')) {
+                    contacts[existingContactIndex].name = name;
+                    showMessage('Контакт обновлен!', 'success');
+                } else {
+                    return;
+                }
+            } else {
+                // Генерируем уникальный ID для нового контакта
+                const contact = {
+                    phone: phone,
+                    name: name,
+                    id: 'contact_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9)
+                };
+                contacts.push(contact);
+                showMessage('Контакт успешно сохранен!', 'success');
+            }
+
+            saveContactsToStorage(contacts);
+            contactForm.reset();
+            updateContactsTable();
+        }
+
+        function deleteContact(contactId) {
+            if (!confirm('Вы уверены, что хотите удалить этот контакт?')) {
+                return;
+            }
+
+            const contacts = getContactsFromStorage();
+            const updatedContacts = contacts.filter(contact => contact.id !== contactId);
+            saveContactsToStorage(updatedContacts);
+            showMessage('Контакт удален!', 'success');
+            updateContactsTable();
+        }
+
+        function clearAllContacts() {
+            if (!confirm('Вы уверены, что хотите удалить все контакты?')) {
+                return;
+            }
+
+            localStorage.removeItem(CONTACTS_KEY);
+            showMessage('Все контакты удалены!', 'success');
+            updateContactsTable();
+        }
+
+        function updateContactsTable() {
+            contactsTable.innerHTML = '';
+
+            const contacts = getContactsFromStorage();
+
+            if (contacts.length === 0) {
+                contactsTable.innerHTML = `
+                    <tr>
+                        <td colspan="3" class="empty-message">Нет сохраненных контактов</td>
+                    </tr>
+                `;
+                return;
+            }
+
+            contacts.forEach(contact => {
+                const row = contactsTable.insertRow();
+                
+                const cellPhone = row.insertCell(0);
+                cellPhone.textContent = contact.phone;
+                
+                const cellName = row.insertCell(1);
+                cellName.textContent = contact.name;
+                
+                const cellAction = row.insertCell(2);
+                const deleteBtn = document.createElement('button');
+                deleteBtn.textContent = 'Удалить';
+                deleteBtn.className = 'delete';
+                deleteBtn.addEventListener('click', () => deleteContact(contact.id));
+                cellAction.appendChild(deleteBtn);
+            });
+        }
+
+        // --- Обработчики событий ---
+        contactForm.addEventListener('submit', saveContact);
+
+        clearAllBtn.addEventListener('click', clearAllContacts);
+
+        phoneInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                contactForm.dispatchEvent(new Event('submit'));
+            }
+        });
+
+        nameInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                contactForm.dispatchEvent(new Event('submit'));
+            }
+        });
+
+        // Обработка события storage для синхронизации между вкладками
+        window.addEventListener('storage', function(e) {
+            if (e.key === CONTACTS_KEY) {
+                showMessage('Данные обновлены из другой вкладки', 'success');
+                updateContactsTable();
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            if (!isLocalStorageSupported()) {
+                showMessage('Ваш браузер не поддерживает localStorage! Функциональность будет ограничена.', 'error');
+            }
+            updateContactsTable();
+        });
+    </script>
+</body>
+</html>
