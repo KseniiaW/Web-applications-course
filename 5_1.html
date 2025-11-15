@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        .field-container {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+        
+        label {
+            width: 80px;
+            display: inline-block;
+        }
+        
+        input {
+            margin-left: 10px;
+            padding: 5px;
+        }
+        
+        .status-icon {
+            margin-left: 10px;
+            width: 20px;
+            height: 20px;
+        }
+        
+        button {
+            padding: 8px 15px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <form id="myForm">
+        <h3>Пожалуйста, заполните обязательные поля.</h3>
+        
+        <div class="field-container">
+            <label for="name">Имя:</label>
+            <input type="text" id="name" name="name" required>
+            <img src="no.jpeg" alt="Обязательное поле" class="status-icon" id="name-icon">
+        </div>
+        
+        <div class="field-container">
+            <label for="age">Возраст:</label>
+            <input type="number" id="age" name="age" min="1" max="120" required>
+            <img src="no.jpeg" alt="Обязательное поле" class="status-icon" id="age-icon">
+        </div>
+        
+        <div class="field-container">
+            <label for="email">E-mail:</label>
+            <input type="email" id="email" name="email" required>
+            <img src="no.jpeg" alt="Обязательное поле" class="status-icon" id="email-icon">
+        </div>
+        
+        <div class="field-container">
+            <label for="website">Сайт:</label>
+            <input type="url" id="website" name="website">
+            <img src="yes.jpeg" alt="Необязательное поле" class="status-icon" id="website-icon">
+        </div>
+        
+        <button type="submit">Отправить</button>
+    </form>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const nameInput = document.getElementById('name');
+            const ageInput = document.getElementById('age');
+            const emailInput = document.getElementById('email');
+            const websiteInput = document.getElementById('website');
+            
+            const nameIcon = document.getElementById('name-icon');
+            const ageIcon = document.getElementById('age-icon');
+            const emailIcon = document.getElementById('email-icon');
+            const websiteIcon = document.getElementById('website-icon');
+            
+            // Для обязательных полей проверяем валидность
+            function validateField(input, icon) {
+                if (input.checkValidity()) {
+                    icon.src = 'yes.jpeg';
+                } else {
+                    icon.src = 'no.jpeg';
+                }
+            }
+            
+            // Для необязательного поля всегда показываем галочку
+            websiteIcon.src = 'yes.jpeg';
+            
+            // Слушатели событий для обязательных полей
+            nameInput.addEventListener('input', function() {
+                validateField(nameInput, nameIcon);
+            });
+            
+            ageInput.addEventListener('input', function() {
+                validateField(ageInput, ageIcon);
+            });
+            
+            emailInput.addEventListener('input', function() {
+                validateField(emailInput, emailIcon);
+            });
+            
+            // Инициализация иконок при загрузке
+            validateField(nameInput, nameIcon);
+            validateField(ageInput, ageIcon);
+            validateField(emailInput, emailIcon);
+        });
+    </script>
+</body>
+</html>
