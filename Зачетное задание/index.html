@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PhotoArt Studio - Обработка фотографий</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>PhotoArt Studio</h1>
+            <p>Профессиональная обработка и ретушь фотографий</p>
+        </div>
+    </header>
+
+    <div class="container">
+        <nav class="main-nav">
+            <ul class="nav-links">
+                <li><a href="index.html">Главная</a></li>
+                <li><a href="gallery.html">Галерея</a></li>
+                <li><a href="editor.html">SVG Редактор</a></li>
+                <li><a href="contacts.html">Контакты</a></li>
+            </ul>
+        </nav>
+
+        <main>
+            <section class="card fade-in">
+                <h2>Добро пожаловать в мир фотографии!</h2>
+                <p>PhotoArt Studio предлагает полный спектр услуг по обработке фотографий, ретуши и созданию уникальных изображений.</p>
+                
+                <!-- Web Storage демонстрация -->
+                <article class="storage-info">
+                    <h3>Персональные настройки</h3>
+                    <div class="form-group">
+                        <label for="userName">Ваше имя:</label>
+                        <input type="text" id="userName" placeholder="Введите ваше имя">
+                    </div>
+                    <button class="btn" onclick="saveUserPreferences()">Сохранить</button>
+                    <button class="btn btn-secondary" onclick="clearPreferences()">Сбросить</button>
+                    <div id="storageMessage"></div>
+                </article>
+            </section>
+
+            <section class="card">
+                <h2>Наши работы</h2>
+                <div class="gallery-grid">
+                    <figure class="gallery-item">
+                        <img src="portrait.png" alt="Портретная фотосессия">
+                        <figcaption>Портретная ретушь</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="peizag.png" alt="Пейзажная фотография">
+                        <figcaption>Обработка пейзажей</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="wedding.png" alt="Свадебная фотография">
+                        <figcaption>Свадебная фотография</figcaption>
+                    </figure>
+                </div>
+            </section>
+
+            <!-- SVG демонстрация -->
+            <section class="card">
+                <h2>Демонстрация SVG эффектов</h2>
+                
+                <div class="svg-container">
+                    <div class="svg-preview">
+                        <svg class="svg-graphic" viewBox="0 0 400 200">
+                            <!-- Фон -->
+                            <rect x="0" y="0" width="400" height="200" fill="#f8f9fa" />
+                            
+                            <!-- Примеры SVG фильтров -->
+                            <defs>
+                                <filter id="shadow">
+                                    <feDropShadow dx="3" dy="3" stdDeviation="2" flood-color="#000000" flood-opacity="0.3"/>
+                                </filter>
+                                <filter id="blur">
+                                    <feGaussianBlur stdDeviation="2"/>
+                                </filter>
+                            </defs>
+
+                            <!-- Фигуры с эффектами -->
+                            <rect x="50" y="50" width="80" height="60" fill="#3498db" filter="url(#shadow)" />
+                            <circle cx="200" cy="80" r="30" fill="#e74c3c" filter="url(#blur)" />
+                            <text x="300" y="100" text-anchor="middle" font-family="Arial" font-size="16" fill="#2c3e50">
+                                SVG Графика
+                            </text>
+                        </svg>
+                    </div>
+                    
+                    <div class="svg-controls">
+                        <div class="control-group">
+                            <label for="svgColor">Цвет фигур:</label>
+                            <input type="color" id="svgColor" value="#3498db" onchange="updateSvgColor()">
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Мультимедиа раздел -->
+            <section class="card">
+                <h2>Обучающие материалы</h2>
+                <div class="media-container">
+                    <div class="media-item">
+                        <h3>Видео-урок</h3>
+                        <video controls width="100%">
+                            <source src="retush.mp4" type="video/mp4">
+                            Ваш браузер не поддерживает видео тег.
+                        </video>
+                        <p>Основы обработки фотографий</p>
+                    </div>
+                    
+                    <div class="media-item">
+                        <h3>Аудио-совет</h3>
+                        <audio controls style="width: 100%">
+                            <source src="sound.mp3" type="audio/mpeg">
+                            Ваш браузер не поддерживает аудио элемент.
+                        </audio>
+                        <p>Советы по композиции кадра</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 PhotoArt Studio. Все права защищены.</p>
+            <address>
+                Email: <a href="mailto:info@photoart.ru">info@photoart.ru</a>
+            </address>
+        </div>
+    </footer>
+
+    <script>
+        // Web Storage функциональность
+        function saveUserPreferences() {
+            const userNameInput = document.getElementById('userName');
+            const storageMessage = document.getElementById('storageMessage');
+            
+            if (!userNameInput || !storageMessage) {
+                console.error('Элементы не найдены');
+                return;
+            }
+            
+            const userName = userNameInput.value;
+            
+            if (userName) {
+                localStorage.setItem('photoArtUserName', userName);
+                
+                storageMessage.innerHTML = 
+                    `<p style="color: green; margin-top: 10px;">Настройки сохранены! Привет, ${userName}!</p>`;
+            }
+        }
+
+        function clearPreferences() {
+            const userNameInput = document.getElementById('userName');
+            const storageMessage = document.getElementById('storageMessage');
+            
+            if (!userNameInput || !storageMessage) {
+                console.error('Элементы не найдены');
+                return;
+            }
+            
+            localStorage.removeItem('photoArtUserName');
+            userNameInput.value = '';
+            storageMessage.innerHTML = 
+                '<p style="color: orange; margin-top: 10px;">Настройки сброшены!</p>';
+        }
+
+        // SVG функциональность
+        function updateSvgColor() {
+            const colorInput = document.getElementById('svgColor');
+            const svg = document.querySelector('.svg-graphic');
+            
+            if (!colorInput || !svg) {
+                console.error('Элементы не найдены');
+                return;
+            }
+            
+            const color = colorInput.value;
+            const rect = svg.querySelector('rect');
+            const circle = svg.querySelector('circle');
+            
+            if (rect) rect.setAttribute('fill', color);
+            if (circle) circle.setAttribute('fill', color);
+            
+            // Сохраняем в sessionStorage
+            sessionStorage.setItem('svgColor', color);
+        }
+
+        window.addEventListener('DOMContentLoaded', function() {
+            const userNameInput = document.getElementById('userName');
+            const storageMessage = document.getElementById('storageMessage');
+            const svgColorInput = document.getElementById('svgColor');
+            
+            // Загружаем сохраненные настройки
+            const savedName = localStorage.getItem('photoArtUserName');
+            
+            if (savedName && userNameInput && storageMessage) {
+                userNameInput.value = savedName;
+                storageMessage.innerHTML = 
+                    `<p style="color: green;">С возвращением, ${savedName}!</p>`;
+            }
+            
+            // Загружаем сохраненный цвет SVG
+            const savedColor = sessionStorage.getItem('svgColor');
+            if (savedColor && svgColorInput) {
+                svgColorInput.value = savedColor;
+                
+                // Применяем сохраненный цвет
+                const svg = document.querySelector('.svg-graphic');
+                if (svg) {
+                    const rect = svg.querySelector('rect');
+                    const circle = svg.querySelector('circle');
+                    if (rect) rect.setAttribute('fill', savedColor);
+                    if (circle) circle.setAttribute('fill', savedColor);
+                }
+            }
+        });
+    </script>
+</body>
+</html>

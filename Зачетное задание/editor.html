@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SVG Редактор - PhotoArt Studio</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>SVG Редактор</h1>
+            <p>Создавайте и редактируйте векторную графику</p>
+        </div>
+    </header>
+
+    <div class="container">
+        <nav class="main-nav">
+            <ul class="nav-links">
+                <li><a href="index.html">Главная</a></li>
+                <li><a href="gallery.html">Галерея</a></li>
+                <li><a href="editor.html">SVG Редактор</a></li>
+                <li><a href="contacts.html">Контакты</a></li>
+            </ul>
+        </nav>
+
+        <main>
+            <section class="card">
+                <h2>Создайте векторное изображение</h2>
+                
+                <div class="svg-container">
+                    <div class="svg-preview">
+                        <svg class="svg-graphic" id="vectorEditor" viewBox="0 0 400 300">
+                            <rect x="0" y="0" width="400" height="300" fill="#f8f9fa" />
+                            <g id="workspace">
+                                <!-- Фигуры будут добавляться здесь -->
+                            </g>
+                        </svg>
+                    </div>
+
+                    <div class="svg-controls">
+                        <div class="control-group">
+                            <label for="shapeType">Добавить фигуру:</label>
+                            <select id="shapeType">
+                                <option value="rect">Прямоугольник</option>
+                                <option value="circle">Круг</option>
+                                <option value="text">Текст</option>
+                            </select>
+                            <button class="btn" onclick="addShape()">Добавить</button>
+                        </div>
+                        
+                        <div class="control-group">
+                            <label>Цвет заливки:</label>
+                            <div class="color-palette">
+                                <div class="color-swatch" style="background: #3498db;" onclick="setFillColor('#3498db')"></div>
+                                <div class="color-swatch" style="background: #e74c3c;" onclick="setFillColor('#e74c3c')"></div>
+                                <div class="color-swatch" style="background: #2ecc71;" onclick="setFillColor('#2ecc71')"></div>
+                                <div class="color-swatch" style="background: #f39c12;" onclick="setFillColor('#f39c12')"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="btn" onclick="saveDesign()">Сохранить дизайн</button>
+                    <button class="btn btn-secondary" onclick="clearWorkspace()">Очистить</button>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 PhotoArt Studio. Все права защищены.</p>
+        </div>
+    </footer>
+
+    <script>
+        let currentFillColor = '#3498db';
+        let shapeCount = 0;
+
+        function addShape() {
+            const shapeTypeSelect = document.getElementById('shapeType');
+            const workspace = document.getElementById('workspace');
+            
+            if (!shapeTypeSelect || !workspace) {
+                console.error('Элементы не найдены');
+                return;
+            }
+            
+            const shapeType = shapeTypeSelect.value;
+            const newId = 'shape' + (++shapeCount);
+            
+            let newElement;
+            const x = Math.random() * 300 + 50;
+            const y = Math.random() * 200 + 50;
+            
+            switch(shapeType) {
+                case 'rect':
+                    newElement = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+                    newElement.setAttribute('x', x);
+                    newElement.setAttribute('y', y);
+                    newElement.setAttribute('width', '60');
+                    newElement.setAttribute('height', '40');
+                    break;
+                case 'circle':
+                    newElement = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                    newElement.setAttribute('cx', x);
+                    newElement.setAttribute('cy', y);
+                    newElement.setAttribute('r', '30');
+                    break;
+                case 'text':
+                    newElement = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                    newElement.setAttribute('x', x);
+                    newElement.setAttribute('y', y);
+                    newElement.setAttribute('text-anchor', 'middle');
+                    newElement.setAttribute('font-family', 'Arial');
+                    newElement.setAttribute('font-size', '16');
+                    newElement.textContent = 'Текст';
+                    break;
+            }
+            
+            if (newElement) {
+                newElement.setAttribute('fill', currentFillColor);
+                newElement.setAttribute('id', newId);
+                newElement.setAttribute('class', 'shape');
+                
+                workspace.appendChild(newElement);
+                
+                // Сохраняем в localStorage
+                saveToStorage();
+            }
+        }
+
+        function setFillColor(color) {
+            currentFillColor = color;
+            const colorSwatches = document.querySelectorAll('.color-swatch');
+            
+            if (colorSwatches.length > 0) {
+                colorSwatches.forEach(swatch => {
+                    swatch.classList.remove('active');
+                });
+                event.target.classList.add('active');
+            }
+        }
+
+        function saveDesign() {
+            const workspace = document.getElementById('workspace');
+            
+            if (!workspace) {
+                console.error('Workspace не найден');
+                return;
+            }
+            
+            const shapes = [];
+            
+            workspace.querySelectorAll('.shape').forEach(shape => {
+                shapes.push({
+                    type: shape.tagName,
+                    fill: shape.getAttribute('fill'),
+                    id: shape.getAttribute('id')
+                });
+            });
+            
+            localStorage.setItem('svgDesign', JSON.stringify(shapes));
+            alert('Дизайн сохранен!');
+        }
+
+        function clearWorkspace() {
+            const workspace = document.getElementById('workspace');
+            
+            if (!workspace) {
+                console.error('Workspace не найден');
+                return;
+            }
+            
+            workspace.innerHTML = '';
+            shapeCount = 0;
+            localStorage.removeItem('svgDesign');
+        }
+
+        function saveToStorage() {
+            const vectorEditor = document.getElementById('vectorEditor');
+            
+            if (!vectorEditor) {
+                console.error('Vector editor не найден');
+                return;
+            }
+            
+            const design = vectorEditor.innerHTML;
+            sessionStorage.setItem('currentSvgDesign', design);
+        }
+
+        window.addEventListener('DOMContentLoaded', function() {
+            const savedDesign = localStorage.getItem('svgDesign');
+            const vectorEditor = document.getElementById('vectorEditor');
+            
+            if (savedDesign && vectorEditor) {
+                try {
+                    const shapes = JSON.parse(savedDesign);
+                    shapes.forEach(shape => {
+                        // Восстанавливаем фигуры
+                        addShape();
+                    });
+                } catch (error) {
+                    console.error('Ошибка при загрузке дизайна:', error);
+                }
+            }
+            
+            const sessionDesign = sessionStorage.getItem('currentSvgDesign');
+            if (sessionDesign && vectorEditor) {
+                vectorEditor.innerHTML = sessionDesign;
+            }
+        });
+    </script>
+</body>
+</html>

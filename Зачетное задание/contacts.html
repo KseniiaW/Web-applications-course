@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Контакты - PhotoArt Studio</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Контакты</h1>
+            <p>Свяжитесь с нами</p>
+        </div>
+    </header>
+
+    <div class="container">
+        <nav class="main-nav">
+            <ul class="nav-links">
+                <li><a href="index.html">Главная</a></li>
+                <li><a href="gallery.html">Галерея</a></li>
+                <li><a href="editor.html">SVG Редактор</a></li>
+                <li><a href="contacts.html">Контакты</a></li>
+            </ul>
+        </nav>
+
+        <main>
+            <section class="card">
+                <h2>Форма обратной связи</h2>
+                <form>
+                    <div class="form-group">
+                        <label for="contactName">Имя:</label>
+                        <input type="text" id="contactName" required placeholder="Ваше имя">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="contactEmail">Email:</label>
+                        <input type="email" id="contactEmail" required placeholder="example@mail.com">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="contactPhone">Телефон:</label>
+                        <input type="tel" id="contactPhone" placeholder="+7 (999) 123-45-67">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="contactMessage">Сообщение:</label>
+                        <textarea id="contactMessage" rows="4" placeholder="Ваше сообщение..."></textarea>
+                    </div>
+                    
+                    <button type="submit" class="btn">Отправить</button>
+                </form>
+            </section>
+        </main>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 PhotoArt Studio. Все права защищены.</p>
+            <address>
+                Email: <a href="mailto:info@photoart.ru">info@photoart.ru</a><br>
+                Телефон: <a href="tel:+79991234567">+7 (999) 123-45-67</a>
+            </address>
+        </div>
+    </footer>
+</body>
+</html>
