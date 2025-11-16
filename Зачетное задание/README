@@ -3,8 +3,11 @@
 <header>,<nav>, <main>,<section>,<article>,<footer>
 <figure>,<figcaption> - иллюстрации с подписями (gallery.html, index.html)
 <address> - контактная информация (contacts.html, index.html)
+
 2. Новые правила CSS3 (style.css)
+
 3. элементы управления форм HTML5 (type="text", type="email, type="tel", type="color", <select> - выпадающие списки (editor.html), <textarea> - многострочный текст (contacts.html), required - обязательные поля (contacts.html))
+
 4.  . Web Storage функциональность (файлы: index.html, editor.html) 
 Реализовано в двух видах:
 localStorage (постоянное хранение):
@@ -14,6 +17,7 @@ editor.html - сохранение созданных SVG дизайнов
 sessionStorage (временное хранение на сессию):
 index.html - сохранение цвета SVG элементов
 editor.html - сохранение текущего состояния редактор
+
 5.  Масштабируемая векторная графика (SVG)
 (файлы: index.html, editor.html)
 
@@ -21,6 +25,7 @@ editor.html - сохранение текущего состояния реда�
 Интерактивный SVG редактор (editor.html) - создание и редактирование векторных фигур
 SVG фильтры - <filter>, <feDropShadow>, <feGaussianBlur>
 Динамическое управление - изменение цвета, добавление фигур через JavaScript
+
 6. Мультимедийные объекты (audio/video)
 Файл: index.html
 Использованы оба тега: <video>, <audio> 
