@@ -134,12 +134,14 @@
     </footer>
 
     <script>
+	'use strict';
+
         // Web Storage функциональность
         function saveUserPreferences() {
             const userNameInput = document.getElementById('userName');
             const storageMessage = document.getElementById('storageMessage');
             
-            if (!userNameInput || !storageMessage) {
+            if (userNameInput === null || storageMessage === null) {
                 console.error('Элементы не найдены');
                 return;
             }
@@ -154,11 +156,11 @@
             }
         }
 
-        function clearPreferences() {
+         function clearPreferences() {
             const userNameInput = document.getElementById('userName');
             const storageMessage = document.getElementById('storageMessage');
             
-            if (!userNameInput || !storageMessage) {
+            if (userNameInput === null || storageMessage === null) {
                 console.error('Элементы не найдены');
                 return;
             }
@@ -174,7 +176,7 @@
             const colorInput = document.getElementById('svgColor');
             const svg = document.querySelector('.svg-graphic');
             
-            if (!colorInput || !svg) {
+            if (colorInput === null || svg === null) {
                 console.error('Элементы не найдены');
                 return;
             }
@@ -183,8 +185,8 @@
             const rect = svg.querySelector('rect');
             const circle = svg.querySelector('circle');
             
-            if (rect) rect.setAttribute('fill', color);
-            if (circle) circle.setAttribute('fill', color);
+            if (rect !== null) rect.setAttribute('fill', color);
+            if (circle !== null) circle.setAttribute('fill', color);
             
             // Сохраняем в sessionStorage
             sessionStorage.setItem('svgColor', color);
@@ -194,6 +196,11 @@
             const userNameInput = document.getElementById('userName');
             const storageMessage = document.getElementById('storageMessage');
             const svgColorInput = document.getElementById('svgColor');
+		
+		if (userNameInput === null || storageMessage === null || svgColorInput === null) {
+                console.error('Не все элементы инициализации найдены');
+                return;
+            }
             
             // Загружаем сохраненные настройки
             const savedName = localStorage.getItem('photoArtUserName');
@@ -211,11 +218,11 @@
                 
                 // Применяем сохраненный цвет
                 const svg = document.querySelector('.svg-graphic');
-                if (svg) {
+                if (svg !== null) {
                     const rect = svg.querySelector('rect');
                     const circle = svg.querySelector('circle');
-                    if (rect) rect.setAttribute('fill', savedColor);
-                    if (circle) circle.setAttribute('fill', savedColor);
+                    if (rect !== null) rect.setAttribute('fill', savedColor);
+                    if (circle !== null) circle.setAttribute('fill', savedColor);
                 }
             }
         });

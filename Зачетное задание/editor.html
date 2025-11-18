@@ -74,6 +74,8 @@
     </footer>
 
     <script>
+	'use strict';
+
         let currentFillColor = '#3498db';
         let shapeCount = 0;
 
@@ -81,7 +83,7 @@
             const shapeTypeSelect = document.getElementById('shapeType');
             const workspace = document.getElementById('workspace');
             
-            if (!shapeTypeSelect || !workspace) {
+            if (shapeTypeSelect === null || workspace === null) {
                 console.error('Элементы не найдены');
                 return;
             }
@@ -118,7 +120,7 @@
                     break;
             }
             
-            if (newElement) {
+            if (newElement !== null) {
                 newElement.setAttribute('fill', currentFillColor);
                 newElement.setAttribute('id', newId);
                 newElement.setAttribute('class', 'shape');
@@ -134,31 +136,40 @@
             currentFillColor = color;
             const colorSwatches = document.querySelectorAll('.color-swatch');
             
-            if (colorSwatches.length > 0) {
+            if (colorSwatches !== null && colorSwatches.length > 0) {
                 colorSwatches.forEach(swatch => {
-                    swatch.classList.remove('active');
+                    if (swatch !== null) {
+                        swatch.classList.remove('active');
+                    }
                 });
-                event.target.classList.add('active');
+                if (event !== null && event.target !== null) {
+                    event.target.classList.add('active');
+                }
             }
         }
 
         function saveDesign() {
             const workspace = document.getElementById('workspace');
             
-            if (!workspace) {
+            if (workspace === null) {
                 console.error('Workspace не найден');
                 return;
             }
             
             const shapes = [];
+            const shapeElements = workspace.querySelectorAll('.shape');
             
-            workspace.querySelectorAll('.shape').forEach(shape => {
-                shapes.push({
-                    type: shape.tagName,
-                    fill: shape.getAttribute('fill'),
-                    id: shape.getAttribute('id')
+            if (shapeElements !== null) {
+                shapeElements.forEach(shape => {
+                    if (shape !== null) {
+                        shapes.push({
+                            type: shape.tagName,
+                            fill: shape.getAttribute('fill'),
+                            id: shape.getAttribute('id')
+                        });
+                    }
                 });
-            });
+            }
             
             localStorage.setItem('svgDesign', JSON.stringify(shapes));
             alert('Дизайн сохранен!');
@@ -166,8 +177,8 @@
 
         function clearWorkspace() {
             const workspace = document.getElementById('workspace');
-            
-            if (!workspace) {
+
+		 if (workspace === null) {
                 console.error('Workspace не найден');
                 return;
             }
@@ -180,7 +191,7 @@
         function saveToStorage() {
             const vectorEditor = document.getElementById('vectorEditor');
             
-            if (!vectorEditor) {
+            if (vectorEditor === null) {
                 console.error('Vector editor не найден');
                 return;
             }
@@ -193,20 +204,27 @@
             const savedDesign = localStorage.getItem('svgDesign');
             const vectorEditor = document.getElementById('vectorEditor');
             
-            if (savedDesign && vectorEditor) {
+            if (vectorEditor === null) {
+                console.error('Vector editor не найден');
+                return;
+            }
+            
+            if (savedDesign !== null) {
                 try {
                     const shapes = JSON.parse(savedDesign);
-                    shapes.forEach(shape => {
-                        // Восстанавливаем фигуры
-                        addShape();
-                    });
+                    if (shapes !== null) {
+                        shapes.forEach(shape => {
+                            // Восстанавливаем фигуры
+                            addShape();
+                        });
+                    }
                 } catch (error) {
                     console.error('Ошибка при загрузке дизайна:', error);
                 }
             }
             
             const sessionDesign = sessionStorage.getItem('currentSvgDesign');
-            if (sessionDesign && vectorEditor) {
+            if (sessionDesign !== null) {
                 vectorEditor.innerHTML = sessionDesign;
             }
         });
